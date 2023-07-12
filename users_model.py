@@ -18,7 +18,6 @@ class User:
             SELECT * FROM users
         """
         results = connectToMySQL(DATABASE).query_db(query)
-        print(results)
         all_users = []
         for row_from_db in results:
             user_instance = cls(row_from_db)
@@ -32,3 +31,33 @@ class User:
             VALUES (%(fname)s,%(lname)s, %(email)s);
             """
         return connectToMySQL(DATABASE).query_db(query,data)
+    
+    @classmethod
+    def display_one(cls,data):
+        query = """
+            SELECT * FROM users
+            WHERE id = %(id)s
+            """
+        results = connectToMySQL(DATABASE).query_db(query,data)
+        if results:
+            user_instance = cls(results[0])
+            return user_instance
+        return results
+    
+    @classmethod
+    def update_one(cls,data):
+        query = """
+            UPDATE users
+            SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s
+            WHERE users.id = %(id)s
+            """
+        
+        connectToMySQL(DATABASE).query_db(query,data)
+        
+
+    @classmethod
+    def delete_user(cls,data):
+        query= """
+            DELETE FROM users WHERE users.id = %(id)s
+            """
+        connectToMySQL(DATABASE).query_db(query,data)
