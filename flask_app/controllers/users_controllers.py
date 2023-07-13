@@ -18,7 +18,12 @@ def new_user():
 @app.route('/create', methods=['POST'])
 def create_user():
     User.create(request.form)
-    return redirect('/')
+    # User.get_latest()
+    data = {
+        'id': id
+    }
+    new_id = User.get_latest(data)
+    return redirect(f'/show/{new_id}')
 
 @app.route('/show/<int:id>')
 def show_user(id):

@@ -11,6 +11,7 @@ class User:
         self.email = data['email']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+    
 
     @classmethod
     def display_all(cls):
@@ -54,7 +55,15 @@ class User:
         
         connectToMySQL(DATABASE).query_db(query,data)
         
-
+    @classmethod
+    def get_latest(cls,data):
+        query= """
+            SELECT * FROM users
+            ORDER BY id DESC
+            """
+        results = connectToMySQL(DATABASE).query_db(query,data)
+        return results[0]['id']
+    
     @classmethod
     def delete_user(cls,data):
         query= """
